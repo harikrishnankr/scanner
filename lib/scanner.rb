@@ -1,19 +1,21 @@
 require_relative "scanner/version"
+require_relative "scanner/functions"
 
 module Scanner
-  keyword=["int","float","char","double","long","short","signed","unsigned"];
   words=gets.chomp;
-  words=words.gsub(',',' ');
+  #words=words.gsub(',',' ');
   words=words.split(" ");
   words.each do |word|
-     if keyword.include?(word)
-          puts word;
-     elsif word.match(/^[_a-zA-Z][a-zA-Z_0-9]*$/)
-          puts "identifier";
-     elsif word.match(/^[0-9][0-9]*$/)
-          puts "number";
-     else
-       puts "error";
+    if is_keyword?(word)
+      puts "<keyword   | "+word+">";
+    elsif is_identifier?(word) 
+      puts "<identifier| "+word+">";
+    elsif is_number?(word)
+      puts "<number    | "+word+">";
+    elsif is_operator?(word)
+      puts "<operator  | "+word+">";
+    else
+      check_for_operators(word);
      end
   end
 end
