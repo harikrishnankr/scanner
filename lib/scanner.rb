@@ -1,5 +1,5 @@
 require_relative "scanner/version"
 
 module Scanner
-  # Your code goes here...
+  puts "Haha this is our first compiler construction program";
 end
