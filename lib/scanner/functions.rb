@@ -19,20 +19,21 @@ def is_operator?(word)
 end
 
 
-def check_for_operators(word)
+def check_for_operators(word,file)
 	words=word.split(/([%""\]\[\/;.,={}()*+-])/);
 	words.delete("");	
 	words.each do |token|
      if is_keyword?(token)
-          puts "<keyword   | "+token+">";
+          file.puts "<keyword   | "+token+">";
      elsif is_identifier?(token)
-          puts "<identifier| "+token+">";
+          file.puts "<identifier| "+token+">";
      elsif is_number?(token)
-          puts "<number    | "+token+">";
+          file.puts "<number    | "+token+">";
      elsif is_operator?(token)
-     	  puts "<operator  | "+token+">";
+     	    file.puts "<operator  | "+token+">";
      else
        puts "error";
+       file.puts "error"
      end
     end
 end
