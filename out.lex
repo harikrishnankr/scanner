@@ -1,20 +1,32 @@
-<keyword   | void>
-<keyword   | main>
-<operator  | (>
-<operator  | )>
-<operator  | {>
-<keyword   | int>
-<identifier| x>
-<operator  | ,>
-<identifier| y>
-<operator  | ,>
-error<operator  | ;>
-<identifier| y>
-<operator  | =>
-<number    | 50>
-<operator  | ;>
-<identifier| x>
-<operator  | =>
-<identifier| y>
-<operator  | ;>
-<operator  | }>
+token <key,void>
+token <key,main>
+token <op,(>
+token <op,)>
+token <op,{>
+token <key,int>
+token <id,#<Identifier:0x00000001068870>>
+token <op,,>
+token <id,#<Identifier:0x000000010683c0>>
+token <op,;>
+token <id,#<Identifier:0x00000001067ec0>>
+token <op,=>
+token <id,#<Identifier:0x00000001067a10>>
+token <op,+>
+token <num,200>
+token <op,;>
+token <key,printf>
+token <op,(>
+token <lit,"The variable is     \" x \" and its value is \n ">
+token <op,)>
+token <op,;>
+token <key,printf>
+token <op,(>
+token <id,#<Identifier:0x00000000e037b0>>
+token <op,)>
+token <op,;>
+token <key,printf>
+token <op,(>
+token <lit,"Thank You">
+token <op,)>
+token <op,;>
+token <op,}>
