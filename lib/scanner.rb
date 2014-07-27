@@ -1,12 +1,16 @@
 require_relative "scanner/version"
 require_relative "scanner/functions"
+
 class Identifier
   @lexeme=""
   @type=""
-  @line=nil
+  @line=""
   def initialize(lexeme,line)
     @lexeme=lexeme
-    @line=line
+    @line="#{line}/"
+  end
+  def pos(line)
+    @line=@line+line.to_s+"/"
   end
 end
 class Number
@@ -18,8 +22,19 @@ class Number
     @line=line
   end
 end
+class Literal
+  @value=nil
+  @line=nil
+  def initialize(value,line)
+    @value=value
+    @line=line
+  end
+end
 module Scanner
-  unless ARGV[0].end_with?(".c")
+  $ID=[];
+  $NUM=[];
+  $LIT=[];
+unless ARGV[0].end_with?(".c")
     puts "Incompatible File";
     exit;
   end
@@ -29,10 +44,10 @@ module Scanner
   file.close;
   file = File.open("out.lex","w");
   words=words.split("\n")
-
+  #p words
   #Scanning Phase-----------------------------------------------------------------------------------------------------------------------------------------
   
-
+  lexem_id={};
   words.map! do|word|
     if word.include?("\"")
       i=0
@@ -81,8 +96,9 @@ module Scanner
             i=i+1
             peek=word[i]
           end while !(peek=~/^[0-9]$/).nil?
-          file.puts "token <num,#{v}>"
-
+          ob=Number.new(v,line)
+          file.puts "token <num,#{ob}>"
+          $NUM<<ob
           next
         end
   #<!---------------- Check for Identifier/Keyword ------------------------------!> 
@@ -96,16 +112,24 @@ module Scanner
           end while !(peek=~/^[A-Za-z0-9]$/).nil? 
             keyword=["int","float","char","double","long","short","signed","unsigned","void","main","printf"];
           if keyword.include?(b)
-            file.puts "token <key,#{b}>"
+            file.puts "token <#{b}>"
           else
-            file.puts "token <id,#{Identifier.new(b,line)}>"
+            if lexem_id[b].nil?
+              ob=Identifier.new(b,line)
+              lexem_id[b]=ob
+            else
+              ob=lexem_id[b]
+              ob.pos(line)
+             end 
+            $ID<<ob
+            file.puts "token <id,#{ob}>"
           end
           next
         end
   #<!---------------- Check for Operator ------------------------------------!>
 
         if !(peek =~ /^[()+-;.=,\*\/\[\]{}%]$/).nil?
-          file.puts "token <op,#{peek}>"
+          file.puts "token <#{peek}>"
         end
         
   #<!---------------- String Literal -------------------------------------------!>
@@ -123,7 +147,9 @@ module Scanner
               end
             end
           end
-          file.puts "token <lit,#{b}>"
+          ob=Literal.new(b,line)
+          file.puts "token <lit,#{ob}>"
+          $LIT<<ob
           i=i+1
           next
         end
@@ -156,4 +182,5 @@ module Scanner
      #end
   #end
   file.close;
+  
 end
